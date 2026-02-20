@@ -3,14 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restitution Management</title>
+    <title>Restitution Management - Phase 2</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #5B3A8F 0%, #2D1B4E 100%);
@@ -19,7 +15,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
@@ -35,12 +31,9 @@
             position: relative;
         }
 
-        .logo-container {
-            margin-bottom: 15px;
-        }
-
+        .logo-container { margin-bottom: 15px; }
         .church-logo {
-            max-width: 200px;
+            max-width: 150px;
             height: auto;
             filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
         }
@@ -58,10 +51,15 @@
             font-weight: 500;
         }
 
-        .status-indicator {
+        .status-indicators {
             position: absolute;
             top: 20px;
-            right: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .status-indicator {
             width: 12px;
             height: 12px;
             border-radius: 50%;
@@ -74,31 +72,39 @@
             box-shadow: 0 0 10px #f44336;
         }
 
+        .sync-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+        }
+
         .tabs {
             display: flex;
             background: #f5f5f5;
             border-bottom: 2px solid #ddd;
             overflow-x: auto;
+            flex-wrap: wrap;
         }
 
         .tab-button {
             flex: 1;
-            min-width: 100px;
+            min-width: 120px;
             padding: 15px 10px;
             border: none;
             background: none;
             cursor: pointer;
-            font-size: 0.95em;
+            font-size: 0.9em;
             font-weight: 500;
             transition: all 0.3s;
             color: #666;
             white-space: nowrap;
         }
 
-        .tab-button:hover {
-            background: #e0e0e0;
-        }
-
+        .tab-button:hover { background: #e0e0e0; }
         .tab-button.active {
             background: white;
             color: #5B3A8F;
@@ -111,40 +117,104 @@
             animation: fadeIn 0.3s;
         }
 
-        .tab-content.active {
-            display: block;
-        }
+        .tab-content.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
 
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #5B3A8F 0%, #2D1B4E 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card.accent {
+            background: linear-gradient(135deg, #F4A259, #E8954A);
+        }
+
+        .stat-card.success {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+        }
+
+        .stat-card.danger {
+            background: linear-gradient(135deg, #f44336, #da190b);
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .stat-trend {
+            font-size: 0.85em;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2D1B4E;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f5f5f5;
+        }
+
+        .chart-canvas {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Forms */
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
         }
 
         .section-title {
-            color: #333;
-            margin: 30px 0 15px 0;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #F4A259;
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #2D1B4E;
         }
 
-        h2 {
-            color: #333;
-            font-size: 1.6em;
-        }
-
-        h3 {
-            color: #555;
+        .form-container {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 12px;
             margin-bottom: 20px;
+            display: none;
         }
+
+        .form-container.active { display: block; }
 
         .form-group {
             margin-bottom: 20px;
@@ -157,13 +227,7 @@
             font-weight: 500;
         }
 
-        .form-group input[type="text"],
-        .form-group input[type="tel"],
-        .form-group input[type="email"],
-        .form-group input[type="date"],
-        .form-group input[type="number"],
-        .form-group select,
-        .form-group textarea {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #ddd;
@@ -172,9 +236,7 @@
             transition: border-color 0.3s;
         }
 
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
             border-color: #5B3A8F;
         }
@@ -183,11 +245,6 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-        }
-
-        .form-group input[type="checkbox"] {
-            width: auto;
-            margin-right: 8px;
         }
 
         .form-actions {
@@ -222,10 +279,6 @@
             color: white;
         }
 
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-
         .btn-danger {
             background: #f44336;
             color: white;
@@ -233,23 +286,7 @@
             font-size: 0.9em;
         }
 
-        .btn-danger:hover {
-            background: #da190b;
-        }
-
-        .search-container {
-            margin-bottom: 20px;
-        }
-
-        .search-container input {
-            width: 100%;
-            max-width: 400px;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1em;
-        }
-
+        /* Data Display */
         .items-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -282,114 +319,99 @@
             font-size: 0.95em;
         }
 
-        .item-card .item-actions {
+        .item-actions {
             margin-top: 15px;
             display: flex;
             gap: 10px;
-            flex-wrap: wrap;
         }
 
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .summary-card {
-            background: linear-gradient(135deg, #5B3A8F 0%, #2D1B4E 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .summary-card h4 {
-            font-size: 0.9em;
-            opacity: 0.9;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .summary-card .amount {
-            font-size: 2em;
-            font-weight: bold;
-            margin: 0;
-        }
-
-        .summary-card .amount.expense {
-            color: #ffcccb;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #5B3A8F 0%, #2D1B4E 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-card.green {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-        }
-
-        .stat-card.red {
-            background: linear-gradient(135deg, #f44336, #da190b);
-        }
-
-        .stat-card.blue {
-            background: linear-gradient(135deg, #2196F3, #1976D2);
-        }
-
-        .stat-card h3 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            color: white;
-        }
-
-        .stat-card p {
-            font-size: 1.1em;
-            opacity: 0.9;
-            color: white;
-        }
-
-        .progress-bar {
-            background: #e0e0e0;
-            border-radius: 10px;
-            height: 20px;
-            margin-top: 10px;
+            background: white;
+            border-radius: 8px;
             overflow: hidden;
         }
 
-        .progress-fill {
-            background: linear-gradient(90deg, #4CAF50, #45a049);
-            height: 100%;
-            transition: width 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .data-table th {
+            background: #5B3A8F;
             color: white;
-            font-size: 0.85em;
-            font-weight: bold;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
         }
 
-        footer {
-            background: #f5f5f5;
-            padding: 20px;
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .data-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        /* Report */
+        .report-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .report-header {
             text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #5B3A8F;
+            margin-bottom: 25px;
+        }
+
+        .report-title {
+            font-size: 1.8em;
+            color: #2D1B4E;
+            margin-bottom: 5px;
+        }
+
+        .report-subtitle {
             color: #666;
             font-size: 0.9em;
         }
 
+        .report-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .report-row.total {
+            font-weight: 700;
+            font-size: 1.1em;
+            border-top: 2px solid #2D1B4E;
+            margin-top: 10px;
+            padding-top: 15px;
+        }
+
+        .report-label {
+            color: #555;
+        }
+
+        .report-value {
+            font-weight: 600;
+            color: #2D1B4E;
+        }
+
+        .report-value.positive {
+            color: #4CAF50;
+        }
+
+        .report-value.negative {
+            color: #f44336;
+        }
+
+        /* Messages */
         .success-message {
             background: #4CAF50;
             color: white;
@@ -400,14 +422,8 @@
         }
 
         @keyframes slideDown {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .empty-state {
@@ -416,195 +432,188 @@
             color: #999;
         }
 
-        .empty-state p {
-            font-size: 1.1em;
+        footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.85em;
-            font-weight: 600;
-            margin-top: 5px;
-        }
-
-        .badge.planning {
-            background: #FFF3E0;
-            color: #F57C00;
-        }
-
-        .badge.in-progress {
-            background: #E3F2FD;
-            color: #1976D2;
-        }
-
-        .badge.on-hold {
-            background: #FCE4EC;
-            color: #C2185B;
-        }
-
-        .badge.completed {
-            background: #E8F5E9;
-            color: #388E3C;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            header h1 {
-                font-size: 1.3em;
-            }
-
-            .subtitle {
-                font-size: 0.95em;
-            }
-
-            .tab-button {
-                font-size: 0.85em;
-                padding: 12px 8px;
-            }
-
-            .tab-content {
-                padding: 20px 15px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .items-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .summary-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .form-actions {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
+            body { padding: 10px; }
+            header h1 { font-size: 1.3em; }
+            .tabs { flex-direction: column; }
+            .tab-button { min-width: 100%; }
+            .tab-content { padding: 20px 15px; }
+            .form-row { grid-template-columns: 1fr; }
+            .items-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .chart-canvas { height: 250px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
+            <div class="status-indicators">
+                <div id="online-status" class="status-indicator"></div>
+            </div>
+            <div class="sync-status">
+                ☁️ <span id="sync-text">Synced</span>
+            </div>
             <div class="logo-container">
-                <img src="logo.png" alt="Restitution Church Logo" class="church-logo">
+                <img src="logo.png" alt="Restitution Church" class="church-logo" onerror="this.style.display='none'">
             </div>
             <h1>Restitution Management</h1>
-            <p class="subtitle">Church Management System</p>
-            <div id="online-status" class="status-indicator"></div>
+            <p class="subtitle">Church Management System - Phase 2</p>
         </header>
 
         <nav class="tabs">
-            <button class="tab-button active" onclick="showTab('members')">Members</button>
-            <button class="tab-button" onclick="showTab('giving')">Giving</button>
-            <button class="tab-button" onclick="showTab('expenditure')">Expenditure</button>
-            <button class="tab-button" onclick="showTab('visitations')">Visitations</button>
-            <button class="tab-button" onclick="showTab('projects')">Projects</button>
-            <button class="tab-button" onclick="showTab('stats')">Dashboard</button>
+            <button class="tab-button active" onclick="showTab('dashboard')">📊 Dashboard</button>
+            <button class="tab-button" onclick="showTab('members')">👥 Members</button>
+            <button class="tab-button" onclick="showTab('giving')">💰 Giving</button>
+            <button class="tab-button" onclick="showTab('expenditure')">💸 Expenditure</button>
+            <button class="tab-button" onclick="showTab('petty-cash')">💵 Petty Cash</button>
+            <button class="tab-button" onclick="showTab('visitations')">🚪 Visitations</button>
+            <button class="tab-button" onclick="showTab('projects')">🏗️ Projects</button>
+            <button class="tab-button" onclick="showTab('analytics')">📈 Analytics</button>
+            <button class="tab-button" onclick="showTab('reports')">📄 Reports</button>
         </nav>
 
-        <!-- MEMBERS TAB -->
-        <div id="members-tab" class="tab-content active">
-            <div class="section-header">
-                <h2>Church Members</h2>
-                <button class="btn btn-primary" onclick="showMemberForm()">+ Add Member</button>
+        <!-- DASHBOARD -->
+        <div id="dashboard-tab" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="dash-members">0</div>
+                    <div class="stat-label">Total Members</div>
+                    <div class="stat-trend" id="dash-member-trend">+0 this month</div>
+                </div>
+                <div class="stat-card success">
+                    <div class="stat-value" id="dash-giving">K 0</div>
+                    <div class="stat-label">Total Giving</div>
+                    <div class="stat-trend" id="dash-giving-trend">This year</div>
+                </div>
+                <div class="stat-card danger">
+                    <div class="stat-value" id="dash-expenses">K 0</div>
+                    <div class="stat-label">Total Expenses</div>
+                    <div class="stat-trend" id="dash-expense-trend">This year</div>
+                </div>
+                <div class="stat-card accent">
+                    <div class="stat-value" id="dash-balance">K 0</div>
+                    <div class="stat-label">Net Balance</div>
+                    <div class="stat-trend">Giving - Expenses</div>
+                </div>
             </div>
 
-            <div id="member-form-container" style="display: none;">
+            <div class="chart-container">
+                <div class="chart-title">Financial Overview (Last 6 Months)</div>
+                <div class="chart-canvas">
+                    <canvas id="dashboardChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Quick Stats</div>
+                <div class="stats-grid">
+                    <div class="item-card">
+                        <h3 id="dash-active-projects">0</h3>
+                        <p>Active Projects</p>
+                    </div>
+                    <div class="item-card">
+                        <h3 id="dash-visits">0</h3>
+                        <p>Visitations This Month</p>
+                    </div>
+                    <div class="item-card">
+                        <h3 id="dash-petty-cash">K 0</h3>
+                        <p>Petty Cash Balance</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MEMBERS (existing code continues...) -->
+        <div id="members-tab" class="tab-content">
+            <div class="section-header">
+                <div class="section-title">Church Members</div>
+                <button class="btn btn-primary" onclick="toggleForm('member-form')">+ Add Member</button>
+            </div>
+
+            <div id="member-form" class="form-container">
                 <h3>Register New Member</h3>
-                <form id="member-form">
+                <form id="memberForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="name">Full Name *</label>
-                            <input type="text" id="name" required>
+                            <label>Full Name *</label>
+                            <input type="text" id="member-name" required>
                         </div>
                         <div class="form-group">
-                            <label for="phone">Phone Number *</label>
-                            <input type="tel" id="phone" required placeholder="+260...">
+                            <label>Phone Number *</label>
+                            <input type="tel" id="member-phone" required>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email">
+                            <label>Email</label>
+                            <input type="email" id="member-email">
                         </div>
                         <div class="form-group">
-                            <label for="gender">Gender</label>
-                            <select id="gender">
+                            <label>Gender</label>
+                            <select id="member-gender">
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label for="address">Address</label>
-                        <textarea id="address" rows="2"></textarea>
+                        <label>Address</label>
+                        <textarea id="member-address" rows="2"></textarea>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="dob">Date of Birth</label>
-                            <input type="date" id="dob">
+                            <label>Date of Birth</label>
+                            <input type="date" id="member-dob">
                         </div>
                         <div class="form-group">
-                            <label for="membership-date">Membership Date *</label>
-                            <input type="date" id="membership-date" required>
+                            <label>Membership Date *</label>
+                            <input type="date" id="member-membership-date" required>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label>
-                            <input type="checkbox" id="baptized">
+                            <input type="checkbox" id="member-baptized">
                             Baptized
                         </label>
                     </div>
-
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Save Member</button>
-                        <button type="button" class="btn btn-secondary" onclick="hideMemberForm()">Cancel</button>
+                        <button type="button" class="btn btn-secondary" onclick="toggleForm('member-form')">Cancel</button>
                     </div>
                 </form>
             </div>
 
-            <div class="search-container">
-                <input type="text" id="search-members" placeholder="Search members..." onkeyup="searchMembers()">
-            </div>
+            <input type="text" id="member-search" placeholder="Search members..." style="width: 100%; max-width: 400px; padding: 12px; border: 2px solid #ddd; border-radius: 8px; margin-bottom: 20px;" onkeyup="searchMembers()">
             <div id="members-list" class="items-grid"></div>
         </div>
 
         <!-- GIVING TAB -->
         <div id="giving-tab" class="tab-content">
             <div class="section-header">
-                <h2>Giving Records</h2>
-                <button class="btn btn-primary" onclick="showGivingForm()">+ Record Giving</button>
+                <div class="section-title">Giving Records</div>
+                <button class="btn btn-primary" onclick="toggleForm('giving-form')">+ Record Giving</button>
             </div>
 
-            <div id="giving-form-container" style="display: none;">
+            <div id="giving-form" class="form-container">
                 <h3>Record Offering/Tithe</h3>
-                <form id="giving-form">
+                <form id="givingForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="giving-date">Date *</label>
+                            <label>Date *</label>
                             <input type="date" id="giving-date" required>
                         </div>
                         <div class="form-group">
-                            <label for="giving-type">Type *</label>
+                            <label>Type *</label>
                             <select id="giving-type" required>
                                 <option value="Offering">Offering</option>
                                 <option value="Tithe">Tithe</option>
@@ -613,14 +622,13 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="giving-amount">Amount (ZMW) *</label>
-                            <input type="number" id="giving-amount" step="0.01" required placeholder="0.00">
+                            <label>Amount (ZMW) *</label>
+                            <input type="number" id="giving-amount" step="0.01" required>
                         </div>
                         <div class="form-group">
-                            <label for="giving-method">Method</label>
+                            <label>Method</label>
                             <select id="giving-method">
                                 <option value="Cash">Cash</option>
                                 <option value="Mobile Money">Mobile Money</option>
@@ -628,31 +636,29 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label for="giving-notes">Notes</label>
+                        <label>Notes</label>
                         <textarea id="giving-notes" rows="2"></textarea>
                     </div>
-
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Save Record</button>
-                        <button type="button" class="btn btn-secondary" onclick="hideGivingForm()">Cancel</button>
+                        <button type="button" class="btn btn-secondary" onclick="toggleForm('giving-form')">Cancel</button>
                     </div>
                 </form>
             </div>
 
-            <div class="summary-cards">
-                <div class="summary-card">
-                    <h4>This Week</h4>
-                    <p class="amount" id="week-total">K 0.00</p>
+            <div class="stats-grid" style="margin-bottom: 20px;">
+                <div class="stat-card success">
+                    <div class="stat-value" id="giving-week">K 0</div>
+                    <div class="stat-label">This Week</div>
                 </div>
-                <div class="summary-card">
-                    <h4>This Month</h4>
-                    <p class="amount" id="month-total">K 0.00</p>
+                <div class="stat-card success">
+                    <div class="stat-value" id="giving-month">K 0</div>
+                    <div class="stat-label">This Month</div>
                 </div>
-                <div class="summary-card">
-                    <h4>Total Giving</h4>
-                    <p class="amount" id="all-time-total">K 0.00</p>
+                <div class="stat-card success">
+                    <div class="stat-value" id="giving-total">K 0</div>
+                    <div class="stat-label">All Time</div>
                 </div>
             </div>
 
@@ -662,98 +668,165 @@
         <!-- EXPENDITURE TAB -->
         <div id="expenditure-tab" class="tab-content">
             <div class="section-header">
-                <h2>Church Expenditure</h2>
-                <button class="btn btn-primary" onclick="showExpenditureForm()">+ Record Expense</button>
+                <div class="section-title">Church Expenditure</div>
+                <button class="btn btn-primary" onclick="toggleForm('expenditure-form')">+ Record Expense</button>
             </div>
 
-            <div id="expenditure-form-container" style="display: none;">
+            <div id="expenditure-form" class="form-container">
                 <h3>Record Expense</h3>
-                <form id="expenditure-form">
+                <form id="expenditureForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="expense-date">Date *</label>
+                            <label>Date *</label>
                             <input type="date" id="expense-date" required>
                         </div>
                         <div class="form-group">
-                            <label for="expense-category">Category *</label>
+                            <label>Category *</label>
                             <select id="expense-category" required>
-                                <option value="Utilities">Utilities (Water, Electricity)</option>
-                                <option value="Maintenance">Maintenance & Repairs</option>
-                                <option value="Supplies">Supplies & Materials</option>
+                                <option value="Utilities">Utilities</option>
+                                <option value="Maintenance">Maintenance</option>
+                                <option value="Supplies">Supplies</option>
                                 <option value="Transport">Transport</option>
-                                <option value="Outreach">Outreach & Missions</option>
-                                <option value="Salaries">Salaries & Allowances</option>
-                                <option value="Events">Events & Programs</option>
+                                <option value="Outreach">Outreach</option>
+                                <option value="Salaries">Salaries</option>
+                                <option value="Events">Events</option>
                                 <option value="Other">Other</option>
                             </select>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="expense-amount">Amount (ZMW) *</label>
-                            <input type="number" id="expense-amount" step="0.01" required placeholder="0.00">
+                            <label>Amount (ZMW) *</label>
+                            <input type="number" id="expense-amount" step="0.01" required>
                         </div>
                         <div class="form-group">
-                            <label for="expense-approved-by">Approved By</label>
-                            <input type="text" id="expense-approved-by" placeholder="Pastor's name">
+                            <label>Approved By</label>
+                            <input type="text" id="expense-approved-by">
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label for="expense-description">Description *</label>
+                        <label>Description *</label>
                         <textarea id="expense-description" rows="2" required></textarea>
                     </div>
-
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Save Expense</button>
-                        <button type="button" class="btn btn-secondary" onclick="hideExpenditureForm()">Cancel</button>
+                        <button type="button" class="btn btn-secondary" onclick="toggleForm('expenditure-form')">Cancel</button>
                     </div>
                 </form>
             </div>
 
-            <div class="summary-cards">
-                <div class="summary-card">
-                    <h4>This Month</h4>
-                    <p class="amount expense" id="month-expense">K 0.00</p>
+            <div class="stats-grid" style="margin-bottom: 20px;">
+                <div class="stat-card danger">
+                    <div class="stat-value" id="expense-month">K 0</div>
+                    <div class="stat-label">This Month</div>
                 </div>
-                <div class="summary-card">
-                    <h4>Total Expenses</h4>
-                    <p class="amount expense" id="all-expense">K 0.00</p>
+                <div class="stat-card danger">
+                    <div class="stat-value" id="expense-total">K 0</div>
+                    <div class="stat-label">All Time</div>
                 </div>
             </div>
 
             <div id="expenditure-list" class="items-grid"></div>
         </div>
 
-        <!-- VISITATIONS TAB -->
-        <div id="visitations-tab" class="tab-content">
+        <!-- PETTY CASH TAB (NEW!) -->
+        <div id="petty-cash-tab" class="tab-content">
             <div class="section-header">
-                <h2>Member Visitations</h2>
-                <button class="btn btn-primary" onclick="showVisitationForm()">+ Log Visit</button>
+                <div class="section-title">Petty Cash Management</div>
+                <button class="btn btn-primary" onclick="toggleForm('petty-cash-form')">+ Add Transaction</button>
             </div>
 
-            <div id="visitation-form-container" style="display: none;">
-                <h3>Log Visitation</h3>
-                <form id="visitation-form">
+            <div class="stat-card accent" style="max-width: 400px; margin-bottom: 25px;">
+                <div class="stat-value" id="petty-cash-balance">K 0</div>
+                <div class="stat-label">Current Petty Cash Balance</div>
+            </div>
+
+            <div id="petty-cash-form" class="form-container">
+                <h3>Petty Cash Transaction</h3>
+                <form id="pettyCashForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="visit-date">Date *</label>
+                            <label>Date *</label>
+                            <input type="date" id="petty-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Type *</label>
+                            <select id="petty-type" required>
+                                <option value="Add">Add Funds</option>
+                                <option value="Spend">Spend</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Amount (ZMW) *</label>
+                            <input type="number" id="petty-amount" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="petty-category">
+                                <option value="Office Supplies">Office Supplies</option>
+                                <option value="Refreshments">Refreshments</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Maintenance">Maintenance</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description *</label>
+                        <textarea id="petty-description" rows="2" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Transaction</button>
+                        <button type="button" class="btn btn-secondary" onclick="toggleForm('petty-cash-form')">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Balance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="petty-cash-list"></tbody>
+            </table>
+        </div>
+
+        <!-- VISITATIONS (existing continues...) -->
+        <div id="visitations-tab" class="tab-content">
+            <div class="section-header">
+                <div class="section-title">Member Visitations</div>
+                <button class="btn btn-primary" onclick="toggleForm('visitation-form')">+ Log Visit</button>
+            </div>
+
+            <div id="visitation-form" class="form-container">
+                <h3>Log Visitation</h3>
+                <form id="visitationForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date *</label>
                             <input type="date" id="visit-date" required>
                         </div>
                         <div class="form-group">
-                            <label for="visit-member">Member Visited *</label>
-                            <input type="text" id="visit-member" required placeholder="Member's name">
+                            <label>Member Visited *</label>
+                            <input type="text" id="visit-member" required>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="visit-visitor">Visitor/Pastor *</label>
-                            <input type="text" id="visit-visitor" required placeholder="Who made the visit">
+                            <label>Visitor/Pastor *</label>
+                            <input type="text" id="visit-visitor" required>
                         </div>
                         <div class="form-group">
-                            <label for="visit-purpose">Purpose *</label>
+                            <label>Purpose *</label>
                             <select id="visit-purpose" required>
                                 <option value="Sick Visit">Sick Visit</option>
                                 <option value="Pastoral Care">Pastoral Care</option>
@@ -764,15 +837,13 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label for="visit-notes">Notes *</label>
-                        <textarea id="visit-notes" rows="3" required placeholder="What happened during the visit?"></textarea>
+                        <label>Notes *</label>
+                        <textarea id="visit-notes" rows="3" required></textarea>
                     </div>
-
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Save Visit</button>
-                        <button type="button" class="btn btn-secondary" onclick="hideVisitationForm()">Cancel</button>
+                        <button type="button" class="btn btn-secondary" onclick="toggleForm('visitation-form')">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -780,44 +851,41 @@
             <div id="visitations-list" class="items-grid"></div>
         </div>
 
-        <!-- PROJECTS TAB -->
+        <!-- PROJECTS (existing continues...) -->
         <div id="projects-tab" class="tab-content">
             <div class="section-header">
-                <h2>Church Projects</h2>
-                <button class="btn btn-primary" onclick="showProjectForm()">+ New Project</button>
+                <div class="section-title">Church Projects</div>
+                <button class="btn btn-primary" onclick="toggleForm('project-form')">+ New Project</button>
             </div>
 
-            <div id="project-form-container" style="display: none;">
+            <div id="project-form" class="form-container">
                 <h3>Create Project</h3>
-                <form id="project-form">
+                <form id="projectForm">
                     <div class="form-group">
-                        <label for="project-name">Project Name *</label>
-                        <input type="text" id="project-name" required placeholder="e.g., New Church Building">
+                        <label>Project Name *</label>
+                        <input type="text" id="project-name" required>
                     </div>
-
                     <div class="form-group">
-                        <label for="project-description">Description *</label>
+                        <label>Description *</label>
                         <textarea id="project-description" rows="3" required></textarea>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="project-budget">Budget (ZMW) *</label>
-                            <input type="number" id="project-budget" step="0.01" required placeholder="0.00">
+                            <label>Budget (ZMW) *</label>
+                            <input type="number" id="project-budget" step="0.01" required>
                         </div>
                         <div class="form-group">
-                            <label for="project-spent">Amount Spent</label>
-                            <input type="number" id="project-spent" step="0.01" value="0" placeholder="0.00">
+                            <label>Amount Spent</label>
+                            <input type="number" id="project-spent" step="0.01" value="0">
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="project-start">Start Date *</label>
+                            <label>Start Date *</label>
                             <input type="date" id="project-start" required>
                         </div>
                         <div class="form-group">
-                            <label for="project-status">Status *</label>
+                            <label>Status *</label>
                             <select id="project-status" required>
                                 <option value="Planning">Planning</option>
                                 <option value="In Progress">In Progress</option>
@@ -826,10 +894,9 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Save Project</button>
-                        <button type="button" class="btn btn-secondary" onclick="hideProjectForm()">Cancel</button>
+                        <button type="button" class="btn btn-secondary" onclick="toggleForm('project-form')">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -837,134 +904,203 @@
             <div id="projects-list" class="items-grid"></div>
         </div>
 
-        <!-- DASHBOARD TAB -->
-        <div id="stats-tab" class="tab-content">
-            <h2>Church Dashboard</h2>
-            
-            <h3 class="section-title">Members</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3 id="total-members">0</h3>
-                    <p>Total Members</p>
-                </div>
-                <div class="stat-card">
-                    <h3 id="male-count">0</h3>
-                    <p>Male</p>
-                </div>
-                <div class="stat-card">
-                    <h3 id="female-count">0</h3>
-                    <p>Female</p>
-                </div>
-                <div class="stat-card">
-                    <h3 id="baptized-count">0</h3>
-                    <p>Baptized</p>
+        <!-- ANALYTICS TAB (NEW WITH CHARTS!) -->
+        <div id="analytics-tab" class="tab-content">
+            <div class="section-title" style="margin-bottom: 25px;">Analytics Dashboard</div>
+
+            <div class="chart-container">
+                <div class="chart-title">Church Growth (Members Over Time)</div>
+                <div class="chart-canvas">
+                    <canvas id="growthChart"></canvas>
                 </div>
             </div>
 
-            <h3 class="section-title">Finances</h3>
-            <div class="stats-grid">
-                <div class="stat-card green">
-                    <h3 id="total-giving-stat">K 0</h3>
-                    <p>Total Giving</p>
-                </div>
-                <div class="stat-card red">
-                    <h3 id="total-expense-stat">K 0</h3>
-                    <p>Total Expenses</p>
-                </div>
-                <div class="stat-card blue">
-                    <h3 id="net-balance">K 0</h3>
-                    <p>Net Balance</p>
+            <div class="chart-container">
+                <div class="chart-title">Giving Trends (Monthly)</div>
+                <div class="chart-canvas">
+                    <canvas id="givingTrendChart"></canvas>
                 </div>
             </div>
 
-            <h3 class="section-title">Activity</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3 id="total-visits">0</h3>
-                    <p>Visitations</p>
+            <div class="chart-container">
+                <div class="chart-title">Expenditure by Category</div>
+                <div class="chart-canvas">
+                    <canvas id="expenseChart"></canvas>
                 </div>
-                <div class="stat-card">
-                    <h3 id="total-projects">0</h3>
-                    <p>Projects</p>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Projects Progress</div>
+                <div id="projects-progress"></div>
+            </div>
+        </div>
+
+        <!-- REPORTS TAB (NEW!) -->
+        <div id="reports-tab" class="tab-content">
+            <div class="section-title" style="margin-bottom: 25px;">Financial Reports</div>
+
+            <div class="report-section">
+                <div class="report-header">
+                    <h2 class="report-title">Income & Expenditure Statement</h2>
+                    <p class="report-subtitle">Period: <span id="report-period">All Time</span></p>
                 </div>
-                <div class="stat-card">
-                    <h3 id="active-projects">0</h3>
-                    <p>Active Projects</p>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #5B3A8F; margin-bottom: 15px;">Income</h3>
+                    <div id="income-breakdown"></div>
+                    <div class="report-row total">
+                        <div class="report-label">Total Income:</div>
+                        <div class="report-value positive" id="total-income">K 0.00</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #5B3A8F; margin-bottom: 15px;">Expenditure</h3>
+                    <div id="expense-breakdown"></div>
+                    <div class="report-row total">
+                        <div class="report-label">Total Expenditure:</div>
+                        <div class="report-value negative" id="total-expenditure">K 0.00</div>
+                    </div>
+                </div>
+
+                <div class="report-row total" style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
+                    <div class="report-label" style="font-size: 1.3em;">Net Position:</div>
+                    <div class="report-value" id="net-position" style="font-size: 1.3em;">K 0.00</div>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <div class="report-header">
+                    <h2 class="report-title">Simple Balance Overview</h2>
+                    <p class="report-subtitle">Current Financial Position</p>
+                </div>
+
+                <div class="report-row">
+                    <div class="report-label">Cash on Hand (Petty Cash):</div>
+                    <div class="report-value" id="balance-petty-cash">K 0.00</div>
+                </div>
+                <div class="report-row">
+                    <div class="report-label">Total Giving Received:</div>
+                    <div class="report-value positive" id="balance-giving">K 0.00</div>
+                </div>
+                <div class="report-row">
+                    <div class="report-label">Total Expenses Paid:</div>
+                    <div class="report-value negative" id="balance-expenses">K 0.00</div>
+                </div>
+                <div class="report-row total">
+                    <div class="report-label">Net Church Funds:</div>
+                    <div class="report-value" id="balance-net">K 0.00</div>
                 </div>
             </div>
         </div>
 
         <footer>
-            <p>Restitution Management System | Data stored locally | <span id="last-sync">Never synced</span></p>
+            <p>Restitution Management System - Phase 2 | Data syncs automatically when online</p>
         </footer>
     </div>
 
+    <!-- Firebase & Chart.js -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
     <script>
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('App loaded successfully!');
-            updateOnlineStatus();
-            loadAllData();
-            setInterval(updateOnlineStatus, 5000);
-        });
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBL-UZGkmMCzwO7SLcgTv1sG07C9hej8io",
+            authDomain: "restitution-church.firebaseapp.com",
+            projectId: "restitution-church",
+            storageBucket: "restitution-church.firebasestorage.app",
+            messagingSenderId: "595188243067",
+            appId: "1:595188243067:web:7823f1f126ffdc836da0de"
+        };
+
+        let db = null, useFirebase = false;
+
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            useFirebase = true;
+            console.log('✅ Firebase connected');
+            updateSyncStatus('Synced', false);
+        } catch (error) {
+            console.warn('⚠️ Using offline mode');
+            updateSyncStatus('Local Only', false);
+        }
 
         // ==================== UTILITY FUNCTIONS ====================
-
+        
         function updateOnlineStatus() {
             const indicator = document.getElementById('online-status');
             if (navigator.onLine) {
                 indicator.classList.remove('offline');
-                indicator.title = 'Online';
             } else {
                 indicator.classList.add('offline');
-                indicator.title = 'Offline';
             }
         }
 
+        function updateSyncStatus(text, syncing = false) {
+            document.getElementById('sync-text').textContent = text;
+        }
+
         function showTab(tabName) {
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            const buttons = document.querySelectorAll('.tab-button');
-            buttons.forEach(button => button.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
             
             document.getElementById(tabName + '-tab').classList.add('active');
             event.target.classList.add('active');
             
-            if (tabName === 'members') loadMembers();
+            if (tabName === 'dashboard') loadDashboard();
+            else if (tabName === 'members') loadMembers();
             else if (tabName === 'giving') loadGiving();
             else if (tabName === 'expenditure') loadExpenditure();
+            else if (tabName === 'petty-cash') loadPettyCash();
             else if (tabName === 'visitations') loadVisitations();
             else if (tabName === 'projects') loadProjects();
-            else if (tabName === 'stats') updateDashboard();
+            else if (tabName === 'analytics') loadAnalytics();
+            else if (tabName === 'reports') loadReports();
         }
 
-        function showSuccessMessage(message) {
-            const existingMessage = document.querySelector('.success-message');
-            if (existingMessage) existingMessage.remove();
+        function toggleForm(formId) {
+            const form = document.getElementById(formId);
+            form.classList.toggle('active');
+            if (formId.includes('date')) {
+                const dateInput = form.querySelector('input[type="date"]');
+                if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+            }
+        }
+
+        function showSuccess(message) {
+            const existing = document.querySelector('.success-message');
+            if (existing) existing.remove();
             
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'success-message';
-            messageDiv.textContent = message;
+            const div = document.createElement('div');
+            div.className = 'success-message';
+            div.textContent = message;
             
             const activeTab = document.querySelector('.tab-content.active');
-            activeTab.insertBefore(messageDiv, activeTab.firstChild);
+            activeTab.insertBefore(div, activeTab.firstChild);
             
-            setTimeout(() => messageDiv.remove(), 3000);
+            setTimeout(() => div.remove(), 3000);
         }
 
         function formatDate(dateString) {
             if (!dateString) return '';
             const date = new Date(dateString);
-            return date.toLocaleDateString('en-GB', { 
-                day: '2-digit', 
-                month: 'short', 
-                year: 'numeric' 
-            });
+            return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
         }
 
         function formatCurrency(amount) {
-            return 'K ' + parseFloat(amount).toFixed(2);
+            return 'K ' + parseFloat(amount || 0).toFixed(2);
+        }
+
+        function getMonthKey(date) {
+            const d = new Date(date);
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+        }
+
+        function getCurrentMonth() {
+            return getMonthKey(new Date());
         }
 
         function getWeekNumber(date) {
@@ -980,47 +1116,104 @@
             return getWeekNumber(new Date());
         }
 
-        function getCurrentMonth() {
-            const now = new Date();
-            return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+        // ==================== STORAGE FUNCTIONS ====================
+        
+        async function saveToStorage(type, item) {
+            let localItems = getFromLocalStorage(type);
+            localItems.push(item);
+            localStorage.setItem('restitution_' + type, JSON.stringify(localItems));
+            
+            if (useFirebase && navigator.onLine) {
+                try {
+                    updateSyncStatus('Syncing...', true);
+                    await db.collection(type).doc(String(item.id)).set(item);
+                    updateSyncStatus('Synced', false);
+                } catch (error) {
+                    console.error('Sync error:', error);
+                    updateSyncStatus('Sync Failed', false);
+                }
+            }
+        }
+
+        function getFromLocalStorage(type) {
+            const data = localStorage.getItem('restitution_' + type);
+            return data ? JSON.parse(data) : [];
+        }
+
+        async function getFromStorage(type) {
+            if (useFirebase && navigator.onLine) {
+                try {
+                    updateSyncStatus('Loading...', true);
+                    const snapshot = await db.collection(type).get();
+                    const items = snapshot.docs.map(doc => doc.data());
+                    localStorage.setItem('restitution_' + type, JSON.stringify(items));
+                    updateSyncStatus('Synced', false);
+                    return items;
+                } catch (error) {
+                    console.error('Load error:', error);
+                }
+            }
+            return getFromLocalStorage(type);
+        }
+
+        async function deleteItem(type, id) {
+            if (confirm('Delete this item?')) {
+                let items = getFromLocalStorage(type);
+                items = items.filter(item => item.id !== id);
+                localStorage.setItem('restitution_' + type, JSON.stringify(items));
+                
+                if (useFirebase && navigator.onLine) {
+                    try {
+                        await db.collection(type).doc(String(id)).delete();
+                    } catch (error) {
+                        console.error('Delete error:', error);
+                    }
+                }
+                
+                loadDataForCurrentTab();
+                showSuccess('Deleted successfully');
+            }
+        }
+
+        function loadDataForCurrentTab() {
+            const activeTab = document.querySelector('.tab-button.active').textContent.toLowerCase();
+            if (activeTab.includes('member')) loadMembers();
+            else if (activeTab.includes('giving')) loadGiving();
+            else if (activeTab.includes('expenditure')) loadExpenditure();
+            else if (activeTab.includes('petty')) loadPettyCash();
+            else if (activeTab.includes('visitation')) loadVisitations();
+            else if (activeTab.includes('project')) loadProjects();
+            else if (activeTab.includes('dashboard')) loadDashboard();
+            else if (activeTab.includes('analytics')) loadAnalytics();
+            else if (activeTab.includes('reports')) loadReports();
         }
 
         // ==================== MEMBERS ====================
-
-        function showMemberForm() {
-            document.getElementById('member-form-container').style.display = 'block';
-            document.getElementById('membership-date').value = new Date().toISOString().split('T')[0];
-        }
-
-        function hideMemberForm() {
-            document.getElementById('member-form-container').style.display = 'none';
-            document.getElementById('member-form').reset();
-        }
-
-        document.getElementById('member-form').addEventListener('submit', function(e) {
+        
+        document.getElementById('memberForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
             const member = {
                 id: Date.now(),
-                name: document.getElementById('name').value,
-                phone: document.getElementById('phone').value,
-                email: document.getElementById('email').value,
-                address: document.getElementById('address').value,
-                gender: document.getElementById('gender').value,
-                dob: document.getElementById('dob').value,
-                membershipDate: document.getElementById('membership-date').value,
-                baptized: document.getElementById('baptized').checked
+                name: document.getElementById('member-name').value,
+                phone: document.getElementById('member-phone').value,
+                email: document.getElementById('member-email').value,
+                gender: document.getElementById('member-gender').value,
+                address: document.getElementById('member-address').value,
+                dob: document.getElementById('member-dob').value,
+                membershipDate: document.getElementById('member-membership-date').value,
+                baptized: document.getElementById('member-baptized').checked
             };
             
-            saveToStorage('members', member);
-            showSuccessMessage('Member registered successfully!');
-            hideMemberForm();
+            await saveToStorage('members', member);
+            showSuccess('Member registered!');
+            document.getElementById('memberForm').reset();
+            toggleForm('member-form');
             loadMembers();
-            updateDashboard();
+            loadDashboard();
         });
 
-        function loadMembers() {
-            const members = getFromStorage('members');
+        async function loadMembers() {
+            const members = await getFromStorage('members');
             const container = document.getElementById('members-list');
             
             if (members.length === 0) {
@@ -1034,7 +1227,7 @@
                     <p>📞 ${m.phone}</p>
                     ${m.email ? `<p>✉️ ${m.email}</p>` : ''}
                     <p>👤 ${m.gender}</p>
-                    ${m.dob ? `<p>🎂 ${formatDate(m.dob)}</p>` : ''}
+                    ${m.dob ? `<p>🎂 Born: ${formatDate(m.dob)}</p>` : ''}
                     <p>📅 Joined: ${formatDate(m.membershipDate)}</p>
                     ${m.baptized ? '<p>💧 Baptized</p>' : ''}
                     <div class="item-actions">
@@ -1044,11 +1237,11 @@
             `).join('');
         }
 
-        function searchMembers() {
-            const searchTerm = document.getElementById('search-members').value.toLowerCase();
-            const members = getFromStorage('members');
+        async function searchMembers() {
+            const term = document.getElementById('member-search').value.toLowerCase();
+            const members = await getFromStorage('members');
             const filtered = members.filter(m => 
-                m.name.toLowerCase().includes(searchTerm) || m.phone.includes(searchTerm)
+                m.name.toLowerCase().includes(term) || m.phone.includes(term)
             );
             
             const container = document.getElementById('members-list');
@@ -1063,7 +1256,6 @@
                     <p>📞 ${m.phone}</p>
                     ${m.email ? `<p>✉️ ${m.email}</p>` : ''}
                     <p>👤 ${m.gender}</p>
-                    ${m.dob ? `<p>🎂 ${formatDate(m.dob)}</p>` : ''}
                     <p>📅 Joined: ${formatDate(m.membershipDate)}</p>
                     ${m.baptized ? '<p>💧 Baptized</p>' : ''}
                     <div class="item-actions">
@@ -1074,20 +1266,9 @@
         }
 
         // ==================== GIVING ====================
-
-        function showGivingForm() {
-            document.getElementById('giving-form-container').style.display = 'block';
-            document.getElementById('giving-date').value = new Date().toISOString().split('T')[0];
-        }
-
-        function hideGivingForm() {
-            document.getElementById('giving-form-container').style.display = 'none';
-            document.getElementById('giving-form').reset();
-        }
-
-        document.getElementById('giving-form').addEventListener('submit', function(e) {
+        
+        document.getElementById('givingForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
             const giving = {
                 id: Date.now(),
                 date: document.getElementById('giving-date').value,
@@ -1096,19 +1277,19 @@
                 method: document.getElementById('giving-method').value,
                 notes: document.getElementById('giving-notes').value,
                 week: getWeekNumber(document.getElementById('giving-date').value),
-                month: document.getElementById('giving-date').value.substring(0, 7)
+                month: getMonthKey(document.getElementById('giving-date').value)
             };
             
-            saveToStorage('giving', giving);
-            showSuccessMessage('Giving recorded!');
-            hideGivingForm();
+            await saveToStorage('giving', giving);
+            showSuccess('Giving recorded!');
+            document.getElementById('givingForm').reset();
+            toggleForm('giving-form');
             loadGiving();
-            updateDashboard();
+            loadDashboard();
         });
 
-        function loadGiving() {
-            const records = getFromStorage('giving');
-            const container = document.getElementById('giving-list');
+        async function loadGiving() {
+            const records = await getFromStorage('giving');
             
             const thisWeek = records.filter(r => r.week === getCurrentWeek());
             const thisMonth = records.filter(r => r.month === getCurrentMonth());
@@ -1116,10 +1297,11 @@
             const monthTotal = thisMonth.reduce((sum, r) => sum + r.amount, 0);
             const allTotal = records.reduce((sum, r) => sum + r.amount, 0);
             
-            document.getElementById('week-total').textContent = formatCurrency(weekTotal);
-            document.getElementById('month-total').textContent = formatCurrency(monthTotal);
-            document.getElementById('all-time-total').textContent = formatCurrency(allTotal);
+            document.getElementById('giving-week').textContent = formatCurrency(weekTotal);
+            document.getElementById('giving-month').textContent = formatCurrency(monthTotal);
+            document.getElementById('giving-total').textContent = formatCurrency(allTotal);
             
+            const container = document.getElementById('giving-list');
             if (records.length === 0) {
                 container.innerHTML = '<div class="empty-state"><p>No giving records yet.</p></div>';
                 return;
@@ -1142,20 +1324,9 @@
         }
 
         // ==================== EXPENDITURE ====================
-
-        function showExpenditureForm() {
-            document.getElementById('expenditure-form-container').style.display = 'block';
-            document.getElementById('expense-date').value = new Date().toISOString().split('T')[0];
-        }
-
-        function hideExpenditureForm() {
-            document.getElementById('expenditure-form-container').style.display = 'none';
-            document.getElementById('expenditure-form').reset();
-        }
-
-        document.getElementById('expenditure-form').addEventListener('submit', function(e) {
+        
+        document.getElementById('expenditureForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
             const expense = {
                 id: Date.now(),
                 date: document.getElementById('expense-date').value,
@@ -1163,27 +1334,28 @@
                 amount: parseFloat(document.getElementById('expense-amount').value),
                 approvedBy: document.getElementById('expense-approved-by').value,
                 description: document.getElementById('expense-description').value,
-                month: document.getElementById('expense-date').value.substring(0, 7)
+                month: getMonthKey(document.getElementById('expense-date').value)
             };
             
-            saveToStorage('expenditure', expense);
-            showSuccessMessage('Expense recorded!');
-            hideExpenditureForm();
+            await saveToStorage('expenditure', expense);
+            showSuccess('Expense recorded!');
+            document.getElementById('expenditureForm').reset();
+            toggleForm('expenditure-form');
             loadExpenditure();
-            updateDashboard();
+            loadDashboard();
         });
 
-        function loadExpenditure() {
-            const expenses = getFromStorage('expenditure');
-            const container = document.getElementById('expenditure-list');
+        async function loadExpenditure() {
+            const expenses = await getFromStorage('expenditure');
             
             const thisMonth = expenses.filter(e => e.month === getCurrentMonth());
             const monthTotal = thisMonth.reduce((sum, e) => sum + e.amount, 0);
             const allTotal = expenses.reduce((sum, e) => sum + e.amount, 0);
             
-            document.getElementById('month-expense').textContent = formatCurrency(monthTotal);
-            document.getElementById('all-expense').textContent = formatCurrency(allTotal);
+            document.getElementById('expense-month').textContent = formatCurrency(monthTotal);
+            document.getElementById('expense-total').textContent = formatCurrency(allTotal);
             
+            const container = document.getElementById('expenditure-list');
             if (expenses.length === 0) {
                 container.innerHTML = '<div class="empty-state"><p>No expenses yet.</p></div>';
                 return;
@@ -1205,21 +1377,78 @@
             `).join('');
         }
 
-        // ==================== VISITATIONS ====================
-
-        function showVisitationForm() {
-            document.getElementById('visitation-form-container').style.display = 'block';
-            document.getElementById('visit-date').value = new Date().toISOString().split('T')[0];
-        }
-
-        function hideVisitationForm() {
-            document.getElementById('visitation-form-container').style.display = 'none';
-            document.getElementById('visitation-form').reset();
-        }
-
-        document.getElementById('visitation-form').addEventListener('submit', function(e) {
+        // ==================== PETTY CASH (NEW!) ====================
+        
+        document.getElementById('pettyCashForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            const transaction = {
+                id: Date.now(),
+                date: document.getElementById('petty-date').value,
+                type: document.getElementById('petty-type').value,
+                amount: parseFloat(document.getElementById('petty-amount').value),
+                category: document.getElementById('petty-category').value,
+                description: document.getElementById('petty-description').value
+            };
             
+            await saveToStorage('pettyCash', transaction);
+            showSuccess('Transaction recorded!');
+            document.getElementById('pettyCashForm').reset();
+            toggleForm('petty-cash-form');
+            loadPettyCash();
+            loadDashboard();
+        });
+
+        async function loadPettyCash() {
+            const transactions = await getFromStorage('pettyCash');
+            transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            let balance = 0;
+            const tbody = document.getElementById('petty-cash-list');
+            
+            if (transactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #999; padding: 40px;">No petty cash transactions yet.</td></tr>';
+                document.getElementById('petty-cash-balance').textContent = formatCurrency(0);
+                return;
+            }
+            
+            // Calculate balance
+            transactions.forEach(t => {
+                if (t.type === 'Add') balance += t.amount;
+                else balance -= t.amount;
+            });
+            
+            document.getElementById('petty-cash-balance').textContent = formatCurrency(balance);
+            
+            // Display reversed to show running balance correctly
+            let runningBalance = 0;
+            const reversed = [...transactions].reverse();
+            reversed.forEach(t => {
+                if (t.type === 'Add') runningBalance += t.amount;
+                else runningBalance -= t.amount;
+                t.balance = runningBalance;
+            });
+            
+            tbody.innerHTML = transactions.map(t => `
+                <tr>
+                    <td>${formatDate(t.date)}</td>
+                    <td><span style="color: ${t.type === 'Add' ? '#4CAF50' : '#f44336'}">${t.type}</span></td>
+                    <td>${t.category}</td>
+                    <td>${t.description}</td>
+                    <td style="color: ${t.type === 'Add' ? '#4CAF50' : '#f44336'}">
+                        ${t.type === 'Add' ? '+' : '-'}${formatCurrency(t.amount)}
+                    </td>
+                    <td>${formatCurrency(t.balance)}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteItem('pettyCash', ${t.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // ==================== VISITATIONS ====================
+        
+        document.getElementById('visitationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
             const visit = {
                 id: Date.now(),
                 date: document.getElementById('visit-date').value,
@@ -1229,15 +1458,15 @@
                 notes: document.getElementById('visit-notes').value
             };
             
-            saveToStorage('visitations', visit);
-            showSuccessMessage('Visit logged!');
-            hideVisitationForm();
+            await saveToStorage('visitations', visit);
+            showSuccess('Visit logged!');
+            document.getElementById('visitationForm').reset();
+            toggleForm('visitation-form');
             loadVisitations();
-            updateDashboard();
         });
 
-        function loadVisitations() {
-            const visits = getFromStorage('visitations');
+        async function loadVisitations() {
+            const visits = await getFromStorage('visitations');
             const container = document.getElementById('visitations-list');
             
             if (visits.length === 0) {
@@ -1262,20 +1491,9 @@
         }
 
         // ==================== PROJECTS ====================
-
-        function showProjectForm() {
-            document.getElementById('project-form-container').style.display = 'block';
-            document.getElementById('project-start').value = new Date().toISOString().split('T')[0];
-        }
-
-        function hideProjectForm() {
-            document.getElementById('project-form-container').style.display = 'none';
-            document.getElementById('project-form').reset();
-        }
-
-        document.getElementById('project-form').addEventListener('submit', function(e) {
+        
+        document.getElementById('projectForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
             const project = {
                 id: Date.now(),
                 name: document.getElementById('project-name').value,
@@ -1286,15 +1504,16 @@
                 status: document.getElementById('project-status').value
             };
             
-            saveToStorage('projects', project);
-            showSuccessMessage('Project created!');
-            hideProjectForm();
+            await saveToStorage('projects', project);
+            showSuccess('Project created!');
+            document.getElementById('projectForm').reset();
+            toggleForm('project-form');
             loadProjects();
-            updateDashboard();
+            loadDashboard();
         });
 
-        function loadProjects() {
-            const projects = getFromStorage('projects');
+        async function loadProjects() {
+            const projects = await getFromStorage('projects');
             const container = document.getElementById('projects-list');
             
             if (projects.length === 0) {
@@ -1304,18 +1523,16 @@
             
             container.innerHTML = projects.map(p => {
                 const progress = (p.spent / p.budget * 100).toFixed(1);
-                const statusClass = p.status.toLowerCase().replace(' ', '-');
-                
                 return `
                     <div class="item-card">
                         <h3>${p.name}</h3>
-                        <span class="badge ${statusClass}">${p.status}</span>
+                        <p><strong>${p.status}</strong></p>
                         <p>📝 ${p.description}</p>
                         <p>💰 Budget: ${formatCurrency(p.budget)}</p>
                         <p>💸 Spent: ${formatCurrency(p.spent)}</p>
                         <p>📅 ${formatDate(p.startDate)}</p>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${Math.min(progress, 100)}%">
+                        <div style="background: #e0e0e0; border-radius: 10px; height: 20px; margin: 10px 0; overflow: hidden;">
+                            <div style="width: ${Math.min(progress, 100)}%; background: linear-gradient(90deg, #4CAF50, #45a049); height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85em; font-weight: bold;">
                                 ${progress}%
                             </div>
                         </div>
@@ -1328,72 +1545,327 @@
         }
 
         // ==================== DASHBOARD ====================
+        
+        let dashChart = null;
 
-        function updateDashboard() {
-            const members = getFromStorage('members');
-            const giving = getFromStorage('giving');
-            const expenses = getFromStorage('expenditure');
-            const visits = getFromStorage('visitations');
-            const projects = getFromStorage('projects');
+        async function loadDashboard() {
+            const members = await getFromStorage('members');
+            const giving = await getFromStorage('giving');
+            const expenses = await getFromStorage('expenditure');
+            const visits = await getFromStorage('visitations');
+            const projects = await getFromStorage('projects');
+            const pettyCash = await getFromStorage('pettyCash');
             
-            document.getElementById('total-members').textContent = members.length;
-            document.getElementById('male-count').textContent = members.filter(m => m.gender === 'Male').length;
-            document.getElementById('female-count').textContent = members.filter(m => m.gender === 'Female').length;
-            document.getElementById('baptized-count').textContent = members.filter(m => m.baptized).length;
-            
+            // Stats
+            document.getElementById('dash-members').textContent = members.length;
             const totalGiving = giving.reduce((sum, g) => sum + g.amount, 0);
             const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
             const netBalance = totalGiving - totalExpenses;
             
-            document.getElementById('total-giving-stat').textContent = formatCurrency(totalGiving);
-            document.getElementById('total-expense-stat').textContent = formatCurrency(totalExpenses);
-            document.getElementById('net-balance').textContent = formatCurrency(netBalance);
+            document.getElementById('dash-giving').textContent = formatCurrency(totalGiving);
+            document.getElementById('dash-expenses').textContent = formatCurrency(totalExpenses);
+            document.getElementById('dash-balance').textContent = formatCurrency(netBalance);
             
-            document.getElementById('total-visits').textContent = visits.length;
-            document.getElementById('total-projects').textContent = projects.length;
-            document.getElementById('active-projects').textContent = projects.filter(p => 
+            document.getElementById('dash-active-projects').textContent = projects.filter(p => 
                 p.status === 'In Progress' || p.status === 'Planning'
             ).length;
-        }
-
-        // ==================== STORAGE ====================
-
-        function saveToStorage(type, item) {
-            let items = getFromStorage(type);
-            items.push(item);
-            localStorage.setItem('restitution_' + type, JSON.stringify(items));
-        }
-
-        function getFromStorage(type) {
-            const data = localStorage.getItem('restitution_' + type);
-            return data ? JSON.parse(data) : [];
-        }
-
-        function deleteItem(type, id) {
-            if (confirm('Delete this item?')) {
-                let items = getFromStorage(type);
-                items = items.filter(item => item.id !== id);
-                localStorage.setItem('restitution_' + type, JSON.stringify(items));
+            
+            const thisMonth = visits.filter(v => getMonthKey(v.date) === getCurrentMonth());
+            document.getElementById('dash-visits').textContent = thisMonth.length;
+            
+            let pettyCashBalance = 0;
+            pettyCash.forEach(t => {
+                if (t.type === 'Add') pettyCashBalance += t.amount;
+                else pettyCashBalance -= t.amount;
+            });
+            document.getElementById('dash-petty-cash').textContent = formatCurrency(pettyCashBalance);
+            
+            // Chart
+            const ctx = document.getElementById('dashboardChart');
+            if (ctx) {
+                // Get last 6 months
+                const months = [];
+                const monthlyGiving = [];
+                const monthlyExpenses = [];
                 
-                if (type === 'members') loadMembers();
-                else if (type === 'giving') loadGiving();
-                else if (type === 'expenditure') loadExpenditure();
-                else if (type === 'visitations') loadVisitations();
-                else if (type === 'projects') loadProjects();
+                for (let i = 5; i >= 0; i--) {
+                    const d = new Date();
+                    d.setMonth(d.getMonth() - i);
+                    const monthKey = getMonthKey(d);
+                    months.push(d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }));
+                    
+                    const givingSum = giving.filter(g => g.month === monthKey).reduce((sum, g) => sum + g.amount, 0);
+                    const expenseSum = expenses.filter(e => e.month === monthKey).reduce((sum, e) => sum + e.amount, 0);
+                    
+                    monthlyGiving.push(givingSum);
+                    monthlyExpenses.push(expenseSum);
+                }
                 
-                updateDashboard();
-                showSuccessMessage('Deleted!');
+                if (dashChart) dashChart.destroy();
+                
+                dashChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Giving',
+                            data: monthlyGiving,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            tension: 0.4
+                        }, {
+                            label: 'Expenses',
+                            data: monthlyExpenses,
+                            borderColor: '#f44336',
+                            backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'top' }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
             }
         }
 
-        function loadAllData() {
-            loadMembers();
-            loadGiving();
-            loadExpenditure();
-            loadVisitations();
-            loadProjects();
-            updateDashboard();
+        // ==================== ANALYTICS (NEW!) ====================
+        
+        let growthChart, givingChart, expenseChart = null;
+
+        async function loadAnalytics() {
+            const members = await getFromStorage('members');
+            const giving = await getFromStorage('giving');
+            const expenses = await getFromStorage('expenditure');
+            const projects = await getFromStorage('projects');
+            
+            // Growth Chart
+            const growthCtx = document.getElementById('growthChart');
+            if (growthCtx) {
+                const months = [];
+                const memberCounts = [];
+                
+                for (let i = 11; i >= 0; i--) {
+                    const d = new Date();
+                    d.setMonth(d.getMonth() - i);
+                    const monthKey = getMonthKey(d);
+                    months.push(d.toLocaleDateString('en-GB', { month: 'short' }));
+                    
+                    const count = members.filter(m => {
+                        const joinMonth = getMonthKey(m.membershipDate);
+                        return joinMonth <= monthKey;
+                    }).length;
+                    
+                    memberCounts.push(count);
+                }
+                
+                if (growthChart) growthChart.destroy();
+                
+                growthChart = new Chart(growthCtx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Total Members',
+                            data: memberCounts,
+                            borderColor: '#5B3A8F',
+                            backgroundColor: 'rgba(91, 58, 143, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+            
+            // Giving Trend Chart
+            const givingCtx = document.getElementById('givingTrendChart');
+            if (givingCtx) {
+                const months = [];
+                const amounts = [];
+                
+                for (let i = 11; i >= 0; i--) {
+                    const d = new Date();
+                    d.setMonth(d.getMonth() - i);
+                    const monthKey = getMonthKey(d);
+                    months.push(d.toLocaleDateString('en-GB', { month: 'short' }));
+                    
+                    const sum = giving.filter(g => g.month === monthKey).reduce((s, g) => s + g.amount, 0);
+                    amounts.push(sum);
+                }
+                
+                if (givingChart) givingChart.destroy();
+                
+                givingChart = new Chart(givingCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Monthly Giving (ZMW)',
+                            data: amounts,
+                            backgroundColor: 'rgba(76, 175, 80, 0.8)',
+                            borderColor: '#4CAF50',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+            
+            // Expense Breakdown Chart
+            const expenseCtx = document.getElementById('expenseChart');
+            if (expenseCtx) {
+                const categories = {};
+                expenses.forEach(e => {
+                    categories[e.category] = (categories[e.category] || 0) + e.amount;
+                });
+                
+                if (expenseChart) expenseChart.destroy();
+                
+                expenseChart = new Chart(expenseCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(categories),
+                        datasets: [{
+                            data: Object.values(categories),
+                            backgroundColor: [
+                                '#5B3A8F', '#F4A259', '#4CAF50', '#2196F3',
+                                '#f44336', '#FF9800', '#9C27B0', '#00BCD4'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'right' }
+                        }
+                    }
+                });
+            }
+            
+            // Projects Progress
+            const progressContainer = document.getElementById('projects-progress');
+            if (progressContainer && projects.length > 0) {
+                progressContainer.innerHTML = projects.map(p => {
+                    const progress = (p.spent / p.budget * 100).toFixed(1);
+                    return `
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <strong>${p.name}</strong>
+                                <span>${progress}%</span>
+                            </div>
+                            <div style="background: #e0e0e0; border-radius: 10px; height: 30px; overflow: hidden;">
+                                <div style="width: ${Math.min(progress, 100)}%; background: linear-gradient(90deg, #5B3A8F, #2D1B4E); height: 100%; display: flex; align-items: center; padding-left: 15px; color: white; font-weight: 600; transition: width 0.5s;">
+                                    ${formatCurrency(p.spent)} / ${formatCurrency(p.budget)}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else if (progressContainer) {
+                progressContainer.innerHTML = '<div class="empty-state"><p>No projects to display</p></div>';
+            }
         }
+
+        // ==================== REPORTS (NEW!) ====================
+        
+        async function loadReports() {
+            const giving = await getFromStorage('giving');
+            const expenses = await getFromStorage('expenditure');
+            const pettyCash = await getFromStorage('pettyCash');
+            
+            // Income Breakdown
+            const incomeTypes = {};
+            giving.forEach(g => {
+                incomeTypes[g.type] = (incomeTypes[g.type] || 0) + g.amount;
+            });
+            
+            const incomeBreakdown = document.getElementById('income-breakdown');
+            incomeBreakdown.innerHTML = Object.entries(incomeTypes).map(([type, amount]) => `
+                <div class="report-row">
+                    <div class="report-label">${type}:</div>
+                    <div class="report-value">${formatCurrency(amount)}</div>
+                </div>
+            `).join('');
+            
+            const totalIncome = giving.reduce((sum, g) => sum + g.amount, 0);
+            document.getElementById('total-income').textContent = formatCurrency(totalIncome);
+            
+            // Expense Breakdown
+            const expenseCategories = {};
+            expenses.forEach(e => {
+                expenseCategories[e.category] = (expenseCategories[e.category] || 0) + e.amount;
+            });
+            
+            const expenseBreakdown = document.getElementById('expense-breakdown');
+            expenseBreakdown.innerHTML = Object.entries(expenseCategories).map(([category, amount]) => `
+                <div class="report-row">
+                    <div class="report-label">${category}:</div>
+                    <div class="report-value">${formatCurrency(amount)}</div>
+                </div>
+            `).join('');
+            
+            const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+            document.getElementById('total-expenditure').textContent = formatCurrency(totalExpenses);
+            
+            // Net Position
+            const netPosition = totalIncome - totalExpenses;
+            const netEl = document.getElementById('net-position');
+            netEl.textContent = formatCurrency(netPosition);
+            netEl.className = 'report-value ' + (netPosition >= 0 ? 'positive' : 'negative');
+            
+            // Balance Sheet
+            let pettyCashBalance = 0;
+            pettyCash.forEach(t => {
+                if (t.type === 'Add') pettyCashBalance += t.amount;
+                else pettyCashBalance -= t.amount;
+            });
+            
+            document.getElementById('balance-petty-cash').textContent = formatCurrency(pettyCashBalance);
+            document.getElementById('balance-giving').textContent = formatCurrency(totalIncome);
+            document.getElementById('balance-expenses').textContent = formatCurrency(totalExpenses);
+            
+            const balanceNet = totalIncome - totalExpenses;
+            const balanceNetEl = document.getElementById('balance-net');
+            balanceNetEl.textContent = formatCurrency(balanceNet);
+            balanceNetEl.className = 'report-value ' + (balanceNet >= 0 ? 'positive' : 'negative');
+        }
+
+        // ==================== INITIALIZATION ====================
+        
+        setInterval(updateOnlineStatus, 5000);
+        updateOnlineStatus();
+        
+        // Load dashboard on start
+        window.addEventListener('DOMContentLoaded', function() {
+            loadDashboard();
+            console.log('✅ Restitution Management Phase 2 loaded!');
+        });
     </script>
 </body>
 </html>
