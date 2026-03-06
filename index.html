@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="Restitution Church Management System">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Restitution">
+  
+  <title>Restitution Church</title>
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Icons -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+/* INSTALL PROMPT */
+.install-prompt {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  z-index: 10000;
+  max-width: 400px;
+  animation: slideUp 0.3s;
+}
+
+@keyframes slideUp {
+  from { transform: translate(-50%, 100px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.install-content h3 {
+  color: #667eea;
+  margin-bottom: 10px;
+}
+
+.install-content p {
+  color: #666;
+  margin-bottom: 15px;
+}
+
+/* OFFLINE INDICATOR */
+.offline-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #FF9800;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  z-index: 9999;
+  font-weight: 600;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.church-logo {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.header-title h1 {
+  font-size: 1.8em;
+  margin-bottom: 5px;
+}
+
+.header-title p {
+  opacity: 0.9;
+  font-size: 0.95em;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-badge {
+  background: rgba(255,255,255,0.2);
+  padding: 10px 20px;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+}
+
+.logout-btn {
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1400px;
+  margin: 30px auto;
+  padding: 0 20px 50px;
+}
+
+/* LOGIN */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.login-box {
+  background: white;
+  border-radius: 20px;
+  padding: 50px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  max-width: 450px;
+  width: 100%;
+  text-align: center;
+}
+
+.login-logo {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 20px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3em;
+  color: white;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.login-box h1 {
+  color: #667eea;
+  margin-bottom: 10px;
+  font-size: 2.5em;
+}
+
+.login-box p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* FORMS */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1em;
+  font-family: inherit;
+  transition: all 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* BUTTONS */
+button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+/* MESSAGES */
+.message {
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  animation: slideDown 0.3s;
+}
+
+.message-success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-left: 4px solid #4CAF50;
+}
+
+.message-error {
+  background: #ffebee;
+  color: #c62828;
+  border-left: 4px solid #F44336;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* UTILITY */
+.hidden {
+  display: none !important;
+}
+
+.mt-2 {
+  margin-top: 20px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .header-left {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+</style>
+</head>
+<body>
+
+  <!-- INSTALL PROMPT -->
+  <div id="installPrompt" class="install-prompt hidden">
+    <div class="install-content">
+      <h3>📱 Install Restitution App</h3>
+      <p>Install on your device for offline access!</p>
+      <button class="btn-primary" id="installBtn">Install Now</button>
+      <button class="btn-secondary" id="dismissBtn">Later</button>
+    </div>
+  </div>
+
+  <!-- OFFLINE INDICATOR -->
+  <div id="offlineIndicator" class="offline-indicator hidden">
+    <span>📡 You're offline. Changes will sync when online.</span>
+  </div>
+
+  <!-- LOGIN SCREEN -->
+  <div id="loginScreen" class="login-container">
+    <div class="login-box">
+      <div class="login-logo">🏛️</div>
+      <h1>Restitution</h1>
+      <p>Church Management System</p>
+      
+      <div id="loginMessage"></div>
+      
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn-primary" style="width: 100%;" onclick="login()">
+        Sign In
+      </button>
+      
+      <p class="mt-2" style="font-size: 0.85em; color: #999;">
+        Progressive Web App v1.0.0
+      </p>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="appContainer" class="hidden">
+    <div class="header">
+      <div class="header-content">
+        <div class="header-left">
+          <div class="church-logo">🏛️</div>
+          <div class="header-title">
+            <h1>Restitution Church</h1>
+            <p>Management System</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="user-badge">
+            <span id="userName">User</span> • 
+            <span id="userRole">Viewer</span>
+          </div>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h2 style="color: white; text-align: center; padding: 50px;">
+        ✅ App Successfully Initialized!<br><br>
+        📱 This is your PWA template - ready to deploy!<br><br>
+        🎯 Use your enhanced dashboard HTML here
+      </h2>
+    </div>
+  </div>
+
+  <!-- Firebase & App Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } 
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCeXG19B1WZzwZsXqAGOyryWKnXKf2FiNI",
+      authDomain: "restitution-management.firebaseapp.com",
+      projectId: "restitution-management",
+      storageBucket: "restitution-management.appspot.com",
+      messagingSenderId: "805158555715",
+      appId: "1:805158555715:web:9d742f6d82f6e4a4f244f6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Login Function
+    window.login = async () => {
+      try {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value.trim();
+        
+        if (!email || !password) {
+          showMessage("loginMessage", "Please enter email and password", "error");
+          return;
+        }
+        
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        showMessage("loginMessage", "Login failed: " + error.message, "error");
+      }
+    };
+
+    // Logout Function
+    window.logout = async () => {
+      if (confirm("Are you sure you want to logout?")) {
+        await signOut(auth);
+      }
+    };
+
+    // Auth State Observer
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById("loginScreen").classList.add("hidden");
+        document.getElementById("appContainer").classList.remove("hidden");
+        document.getElementById("userName").textContent = user.email;
+        console.log("✅ User logged in:", user.email);
+      } else {
+        document.getElementById("loginScreen").classList.remove("hidden");
+        document.getElementById("appContainer").classList.add("hidden");
+        console.log("👤 User logged out");
+      }
+    });
+
+    // Utility function
+    function showMessage(elementId, message, type) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      el.innerHTML = `<div class="message message-${type}">${message}</div>`;
+      setTimeout(() => el.innerHTML = "", 5000);
+    }
+
+    console.log("✅ App initialized!");
+  </script>
+  
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(reg => {
+            console.log('✅ Service Worker registered:', reg.scope);
+            
+            // Check for updates
+            reg.addEventListener('updatefound', () => {
+              const newWorker = reg.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  if (confirm('New version available! Reload to update?')) {
+                    window.location.reload();
+                  }
+                }
+              });
+            });
+          })
+          .catch(err => console.log('❌ Service Worker error:', err));
+      });
+    }
+
+    // PWA Install Prompt
+    let deferredPrompt;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      const installPrompt = document.getElementById('installPrompt');
+      installPrompt.classList.remove('hidden');
+      
+      document.getElementById('installBtn').addEventListener('click', async () => {
+        installPrompt.classList.add('hidden');
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`Install prompt: ${outcome}`);
+        deferredPrompt = null;
+      });
+      
+      document.getElementById('dismissBtn').addEventListener('click', () => {
+        installPrompt.classList.add('hidden');
+      });
+    });
+
+    window.addEventListener('appinstalled', () => {
+      console.log('✅ PWA installed successfully!');
+    });
+
+    // Online/Offline Detection
+    window.addEventListener('online', () => {
+      document.getElementById('offlineIndicator').classList.add('hidden');
+      console.log('✅ Back online');
+    });
+
+    window.addEventListener('offline', () => {
+      document.getElementById('offlineIndicator').classList.remove('hidden');
+      console.log('📡 Offline mode');
+    });
+  </script>
+</body>
+</html>
